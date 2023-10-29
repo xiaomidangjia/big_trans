@@ -74,7 +74,7 @@ def dy_crypto_bigtrans():
                 if number['crypto'][0]=='USDT' or number['crypto'][0]=='USDC':
                     timestamp = int(time.time() * 1000)
                     c_id = 'A' + str(timestamp)
-                    res_dict = {'value':'correct','crypto_id':c_id,'crypto_start_time':timestamp,'crypto_time':now_time1,'crypto_direction':'open_long','crypto_open':1*0.995,'crypto_win':1*1.005,'crypto_loss':1*0.985,'finish':0}
+                    res_dict = {'value':'wrong','crypto_id':c_id,'crypto_start_time':timestamp,'crypto_time':now_time1,'crypto_direction':'open_long','crypto_open':1*0.995,'crypto_win':1*1.005,'crypto_loss':1*0.985,'finish':0}
                 else:
                 # 是btc
                     sub_res_data_2 = sub_res_data_1[(sub_res_data_1.exchange=='coinbase') & (sub_res_data_1.value<3000)]
@@ -85,7 +85,7 @@ def dy_crypto_bigtrans():
                         # 开空
                         timestamp = int(time.time() * 1000)
                         c_id = 'A' + str(timestamp)
-                        res_dict = {'value':'correct','crypto_id':c_id,'crypto_start_time':timestamp,'crypto_time':now_time1,'crypto_direction':'open_short','crypto_open':1*1.005,'crypto_win':1*0.995,'crypto_loss':1*1.015,'finish':0}
+                        res_dict = {'value':'wrong','crypto_id':c_id,'crypto_start_time':timestamp,'crypto_time':now_time1,'crypto_direction':'open_short','crypto_open':1*1.005,'crypto_win':1*0.995,'crypto_loss':1*1.015,'finish':0}
             else:
                 res_dict = {'value':'wrong','crypto_id':'A01','crypto_start_time':1,'crypto_time':'2023-01-01 10:20:30','crypto_direction':'open_long','crypto_open':1,'crypto_win':1,'crypto_loss':1,'finish':1}                
 
