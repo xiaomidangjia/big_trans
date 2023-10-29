@@ -94,6 +94,6 @@ def dy_crypto_bigtrans():
     return ans_str
 
 if __name__ == '__main__':
-    app.run("0.0.0.0", port=5070)
+    app.run("0.0.0.0", port=5010)
 
 
