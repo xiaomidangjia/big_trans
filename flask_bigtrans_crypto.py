@@ -18,6 +18,30 @@ import hmac
 import datetime as dt
 app = Flask(__name__)
 
+# 第二个log日志打印接口,每隔60s打印一次
+def get_timestamp():
+    return int(time.time() * 1000)
+def sign(message, secret_key):
+    mac = hmac.new(bytes(secret_key, encoding='utf8'), bytes(message, encoding='utf-8'), digestmod='sha256')
+    d = mac.digest()
+    return base64.b64encode(d)
+def pre_hash(timestamp, method, request_path, body):
+    return str(timestamp) + str.upper(method) + request_path + body
+def parse_params_to_str(params):
+    url = '?'
+    for key, value in params.items():
+        url = url + str(key) + '=' + str(value) + '&'
+    return url[0:-1]
+def get_header(api_key, sign, timestamp, passphrase):
+    header = dict()
+    header['Content-Type'] = 'application/json'
+    header['ACCESS-KEY'] = api_key
+    header['ACCESS-SIGN'] = sign
+    header['ACCESS-TIMESTAMP'] = str(timestamp)
+    header['ACCESS-PASSPHRASE'] = passphrase
+    # header[LOCALE] = 'zh-CN'
+    return header
+
 @app.route("/dy_crypto_bigtrans", methods=['post'])
 def dy_crypto_bigtrans():
     date = request.form.get('date')
@@ -59,25 +83,6 @@ def dy_crypto_bigtrans():
     time_diff= end_time- start_time
     # 将时间差转换为分钟数
     minutes= time_diff.total_seconds() // 60
-    w1 = 0 
-    while w1 == 0:
-        timestamp = get_timestamp()
-        response = None
-        request_path = "/api/mix/v1/market/ticker"
-        url = API_URL + request_path
-        params = {"symbol":"BTCUSDT_UMCBL"}
-        request_path = request_path + parse_params_to_str(params)
-        url = API_URL + request_path
-        body = ""
-        sign_cang = sign(pre_hash(timestamp, "GET", request_path, str(body)), API_SECRET_KEY)
-        header = get_header(API_KEY, sign_cang, timestamp, PASSPHRASE)
-        response = requests.get(url, headers=header)
-        ticker = json.loads(response.text)
-        btc_price = float(ticker['data']['last'])
-        if btc_price > 0:
-            w1 = 1
-        else:
-            w1 = 0
     if minutes >10:
         res_dict = {'value':'wrong','crypto_id':'A01','crypto_start_time':1,'crypto_time':'2023-01-01 10:20:30','crypto_direction':'other','crypto_open':1,'crypto_win':1,'crypto_loss':1,'finish':1}
     else:
@@ -91,6 +96,25 @@ def dy_crypto_bigtrans():
             number = sub_res_data_1.groupby(['crypto'],as_index=False)['hash'].count()
             number = number.reset_index(drop=True)
             if len(number) == 1:
+                w1 = 0 
+                while w1 == 0:
+                    timestamp = get_timestamp()
+                    response = None
+                    request_path = "/api/mix/v1/market/ticker"
+                    url = API_URL + request_path
+                    params = {"symbol":"BTCUSDT_UMCBL"}
+                    request_path = request_path + parse_params_to_str(params)
+                    url = API_URL + request_path
+                    body = ""
+                    sign_cang = sign(pre_hash(timestamp, "GET", request_path, str(body)), API_SECRET_KEY)
+                    header = get_header(API_KEY, sign_cang, timestamp, PASSPHRASE)
+                    response = requests.get(url, headers=header)
+                    ticker = json.loads(response.text)
+                    btc_price = float(ticker['data']['last'])
+                    if btc_price > 0:
+                        w1 = 1
+                    else:
+                        w1 = 0
                 # 是稳定币
                 if number['crypto'][0]=='USDT' or number['crypto'][0]=='USDC':
                     timestamp = int(time.time() * 1000)
