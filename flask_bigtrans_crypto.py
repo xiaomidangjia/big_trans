@@ -42,9 +42,10 @@ def dy_crypto_bigtrans():
     res_data['crypto'] = res_data.iloc[:,1]
     res_data['exchange'] = res_data.iloc[:,2]
     res_data['number'] = res_data.iloc[:,3]
-    res_data['value'] = float(res_data.iloc[:,4])
+    res_data['value'] = res_data.iloc[:,4]
     res_data['hash'] = res_data.iloc[:,5]
     res_data = res_data[['date','crypto','exchange','number','value','hash']]
+    res_data['value'] = res_data['value'].apply(lambda x:float(x))
     res_data['exchange'] = res_data['exchange'].apply(lambda x:x.lower())
     res_data = res_data[res_data.exchange=='coinbase']
     res_data['date'] = pd.to_datetime(res_data['date'])
