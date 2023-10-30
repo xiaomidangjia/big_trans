@@ -65,7 +65,7 @@ def dy_crypto_bigtrans():
         up_time1 = pd.to_datetime(now_time1) + dt.timedelta(hours=-1)
         sub_res_data_1 = res_data[res_data.date<up_time1]
         if len(sub_res_data_1) ==0:
-            res_dict = {'value':'wrong','crypto_id':'A01','crypto_start_time':1,'crypto_time':'2023-01-01 10:20:30','crypto_direction':'other','crypto_open':1,'crypto_win':1,'crypto_loss':1,'finish':1}
+            res_dict = {'value':'wrong','crypto_id':'A02','crypto_start_time':1,'crypto_time':'2023-01-01 10:20:30','crypto_direction':'other','crypto_open':1,'crypto_win':1,'crypto_loss':1,'finish':1}
         else:
             # 判断btc，usdt,usdc 的条数
             number = sub_res_data_1.groupby(['crypto'],as_index=False)['hash'].count()
@@ -81,14 +81,14 @@ def dy_crypto_bigtrans():
                     sub_res_data_2 = sub_res_data_1[(sub_res_data_1.exchange=='coinbase') & (sub_res_data_1.value<3000)]
                     if len(sub_res_data_2) == 0:
                         # 不开
-                        res_dict = {'value':'wrong','crypto_id':'A01','crypto_start_time':1,'crypto_time':'2023-01-01 10:20:30','crypto_direction':'other','crypto_open':1,'crypto_win':1,'crypto_loss':1,'finish':1}   
+                        res_dict = {'value':'wrong','crypto_id':'A03','crypto_start_time':1,'crypto_time':'2023-01-01 10:20:30','crypto_direction':'other','crypto_open':1,'crypto_win':1,'crypto_loss':1,'finish':1}   
                     else:
                         # 开空
                         timestamp = int(time.time() * 1000)
                         c_id = 'A' + str(timestamp)
                         res_dict = {'value':'wrong','crypto_id':c_id,'crypto_start_time':timestamp,'crypto_time':now_time1,'crypto_direction':'open_short','crypto_open':1*1.005,'crypto_win':1*0.995,'crypto_loss':1*1.015,'finish':0}
             else:
-                res_dict = {'value':'wrong','crypto_id':'A01','crypto_start_time':1,'crypto_time':'2023-01-01 10:20:30','crypto_direction':'other','crypto_open':1,'crypto_win':1,'crypto_loss':1,'finish':1}                
+                res_dict = {'value':'wrong','crypto_id':'A04','crypto_start_time':1,'crypto_time':'2023-01-01 10:20:30','crypto_direction':'other','crypto_open':1,'crypto_win':1,'crypto_loss':1,'finish':1}                
 
     ans_str = json.dumps(res_dict)
 
