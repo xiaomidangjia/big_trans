@@ -83,7 +83,7 @@ def dy_crypto_bigtrans():
     time_diff= end_time- start_time
     # 将时间差转换为分钟数
     minutes= time_diff.total_seconds() // 60
-    if minutes >10:
+    if minutes >100:
         res_dict = {'value':'wrong','crypto_id':'A01','crypto_start_time':1,'crypto_time':'2023-01-01 10:20:30','crypto_direction':'other','crypto_open':1,'crypto_win':1,'crypto_loss':1,'finish':1}
     else:
         now_time1 = str(datetime.utcnow())[0:19]
